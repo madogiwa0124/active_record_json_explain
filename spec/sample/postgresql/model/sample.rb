@@ -12,8 +12,6 @@ module Postgresql
       database: 'sample'
     )
 
-    require 'active_record_json_explain'
-
     scope :with_title, -> { where(title: 'hoge') }
   end
 end
