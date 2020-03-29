@@ -27,7 +27,7 @@ Style/HashTransformValues:
   Enabled: true
 
 Layout/LineLength:
-  Max: 90
+  Max: 100
 
 Layout/EmptyLineAfterGuardClause:
   Enabled: false
