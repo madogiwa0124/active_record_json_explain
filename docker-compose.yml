@@ -1,0 +1,14 @@
+mysql:
+  image: mysql
+  ports:
+    - 3306:3306
+  environment:
+    - MYSQL_DATABASE=root
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+postgres:
+  image: postgres
+  ports:
+    - 5432:5432
+  environment:
+    - POSTGRES_USER=sample
+    - POSTGRES_PASSWORD=password
