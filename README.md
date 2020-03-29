@@ -26,8 +26,8 @@ If you use this gem, you can get the result in JSON format by `explain(json: tru
 ``` ruby
 # NOTE:
 # if use postgresql adapter, Rails run `require 'activerecord/lib/active_record/connection_adapters/postgresql/database_statement'` when establish_connection runs.
-# So run `require 'active_record_scope_analyzer/json_explain'` after `establish_connection`.
-require 'active_record_scope_analyzer/json_explain'
+# So run `require 'active_record_json_explain'` after `establish_connection`.
+require 'active_record_json_explain'
 
 class Sample < ActiveRecord::Base
   scope :with_title, -> { where(title: 'hoge') }
@@ -162,7 +162,7 @@ CREATE TABLE
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/active_record_json_explain. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/active_record_json_explain/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/Madogiwa0124/active_record_json_explain. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/Madogiwa0124/active_record_json_explain/blob/master/CODE_OF_CONDUCT.md).
 
 
 ## License
