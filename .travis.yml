@@ -6,6 +6,7 @@
     - postgresql
   rvm:
     - 2.7.0
+    - 2.6.5
   os:
     - linux
   before_install:
