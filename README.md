@@ -1,15 +1,13 @@
 # ActiveRecordJsonExplain
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/active_record_json_explain`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem extends `ActiveRecord::Relation#explain` to make it possible to get EXPLAIN in JSON format.(Only supported MySQL and Postgresql)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'active_record_json_explain'
+gem 'active_record_json_explain', require: false
 ```
 
 And then execute:
@@ -22,13 +20,110 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+If you use this gem, you can get the result in JSON format by `explain(json: true)`.
+
+``` ruby
+# NOTE:
+# if use postgresql adapter, Rails run `require 'activerecord/lib/active_record/connection_adapters/postgresql/database_statement'` when establish_connection runs.
+# So run `require 'active_record_scope_analyzer/json_explain'` after `establish_connection`.
+require 'active_record_scope_analyzer/json_explain'
+
+class Sample < ActiveRecord::Base
+  scope :with_title, -> { where(title: 'hoge') }
+end
+
+# --- MySql ---
+Sample.with_title.explain
+=> EXPLAIN for: SELECT `samples`.* FROM `samples` WHERE `samples`.`title` = 'hoge'
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-------------+
+| id | select_type | table   | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-------------+
+|  1 | SIMPLE      | samples | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    1 |    100.0 | Using where |
++----+-------------+---------+------------+------+---------------+------+---------+------+------+----------+-------------+
+1 row in set (0.00 sec)
+
+Sample.with_title.explain(json: true)
+=> EXPLAIN for: SELECT `samples`.* FROM `samples` WHERE `samples`.`title` = 'hoge'
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| EXPLAIN                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| {
+  "query_block": {
+    "select_id": 1,
+    "cost_info": {
+      "query_cost": "0.35"
+    },
+    "table": {
+      "table_name": "samples",
+      "access_type": "ALL",
+      "rows_examined_per_scan": 1,
+      "rows_produced_per_join": 1,
+      "filtered": "100.00",
+      "cost_info": {
+        "read_cost": "0.25",
+        "eval_cost": "0.10",
+        "prefix_cost": "0.35",
+        "data_read_per_join": "1K"
+      },
+      "used_columns": [
+        "id",
+        "category",
+        "title",
+        "body"
+      ],
+      "attached_condition": "(`sample`.`samples`.`title` = 'hoge')"
+    }
+  }
+} |
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+#--- Postgresql ---
+Sample.with_title.explain
+=> EXPLAIN for: SELECT "samples".* FROM "samples" WHERE "samples"."title" = $1 [["title", "hoge"]]
+                        QUERY PLAN
+----------------------------------------------------------
+Seq Scan on samples  (cost=0.00..11.62 rows=1 width=556)
+  Filter: ((title)::text = 'hoge'::text)
+(2 rows)
+
+Sample.with_title.explain(json: true)
+=> EXPLAIN for: SELECT "samples".* FROM "samples" WHERE "samples"."title" = $1 [["title", "hoge"]]
+                                                                                                                                                    QUERY PLAN
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[
+  {
+    "Plan": {
+      "Node Type": "Seq Scan",
+      "Parallel Aware": false,
+      "Relation Name": "samples",
+      "Alias": "samples",
+      "Startup Cost": 0.00,
+      "Total Cost": 11.62,
+      "Plan Rows": 1,
+      "Plan Width": 556,
+      "Filter": "((title)::text = 'hoge'::text)"
+    }
+  }
+]
+(1 row)
+```
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+Use docker-compose to build mysql and postgres containers for development.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```
+$ docker-compose up -d
+Creating active_record_json_explain_mysql_1    ... done
+Creating active_record_json_explain_postgres_1 ... done
+
+$ docker-compose ps
+                Name                               Command              State                 Ports
+-----------------------------------------------------------------------------------------------------------------
+active_record_json_explain_mysql_1      docker-entrypoint.sh mysqld     Up      0.0.0.0:3306->3306/tcp, 33060/tcp
+active_record_json_explain_postgres_1   docker-entrypoint.sh postgres   Up      0.0.0.0:5432->5432/tcp
+```
 
 ## Contributing
 
@@ -41,4 +136,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the ActiveRecordJsonExplain project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/active_record_json_explain/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the ActiveRecordJsonExplain project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/Madogiwa0124/active_record_json_explain/blob/master/CODE_OF_CONDUCT.md).
