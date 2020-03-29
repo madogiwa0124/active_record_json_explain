@@ -1,0 +1,6 @@
+EXPLAIN for: SELECT "samples".* FROM "samples" WHERE "samples"."title" = $1 [["title", "hoge"]]
+                        QUERY PLAN
+----------------------------------------------------------
+ Seq Scan on samples  (cost=0.00..11.62 rows=1 width=556)
+   Filter: ((title)::text = 'hoge'::text)
+(2 rows)
