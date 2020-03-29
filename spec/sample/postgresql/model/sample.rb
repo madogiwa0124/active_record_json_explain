@@ -6,7 +6,7 @@ module Postgresql
   class Sample < ActiveRecord::Base
     establish_connection(
       adapter: Postgresql::ADAPTER,
-      host: 'localhost',
+      host: '0.0.0.0',
       username: 'sample',
       password: 'password',
       database: 'sample'

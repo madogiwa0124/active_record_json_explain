@@ -6,7 +6,7 @@ module Mysql
   class Sample < ActiveRecord::Base
     establish_connection(
       adapter: Mysql::ADAPTER,
-      host: 'localhost',
+      host: '0.0.0.0',
       username: 'root',
       password: nil,
       database: 'sample'

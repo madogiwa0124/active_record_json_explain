@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+echo "=== START DB SETUP ===="
+
+echo "= MySQL START ="
+mysql -u root -h 0.0.0.0 < 'spec/sample/mysql/db/migrate/0000_create_sample_schema.sql'
+mysql -u root -h 0.0.0.0 -e 'SHOW DATABASES;'
+mysql -u root -h 0.0.0.0 -e 'USE sample; SHOW TABLES;'
+echo "= MySQL END ="
+
+echo "= Postgresql START ="
+PGPASSWORD=password psql -U sample -h 0.0.0.0 -f 'spec/sample/postgresql/db/migrate/0000_create_sample_schema.sql'
+PGPASSWORD=password psql -U sample -h 0.0.0.0 -c '\d'
+echo "= Postgresql END ="
+
+echo "=== END DB SETUP ===="

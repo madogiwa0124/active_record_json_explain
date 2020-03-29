@@ -125,6 +125,40 @@ active_record_json_explain_mysql_1      docker-entrypoint.sh mysqld     Up      
 active_record_json_explain_postgres_1   docker-entrypoint.sh postgres   Up      0.0.0.0:5432->5432/tcp
 ```
 
+run `bin/db_setup` and create sample database and table for MySQL, Postgresql.
+
+```
+$ bin/db_setup
+=== START DB SETUP ====
+= MySQL START =
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| root               |
+| sample             |
+| sys                |
++--------------------+
++------------------+
+| Tables_in_sample |
++------------------+
+| samples          |
++------------------+
+= MySQL END =
+= Postgresql START =
+CREATE TABLE
+         List of relations
+ Schema |  Name   | Type  | Owner
+--------+---------+-------+--------
+ public | samples | table | sample
+(1 row)
+
+= Postgresql END =
+=== END DB SETUP ====
+```
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/active_record_json_explain. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/active_record_json_explain/blob/master/CODE_OF_CONDUCT.md).
