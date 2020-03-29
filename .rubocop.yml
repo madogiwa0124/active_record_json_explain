@@ -1,0 +1,33 @@
+AllCops:
+  TargetRubyVersion: 2.7.0
+  Exclude:
+    - './active_record_json_explain.gemspec'
+    - 'vendor/**/*'
+
+Metrics/ClassLength:
+  Max: 120
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+
+Style/Documentation:
+  Enabled: false
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
+
+Layout/LineLength:
+  Max: 90
+
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
