@@ -11,6 +11,9 @@
     - linux
   before_install:
     - gem install bundler -v 2.1.2
+  gemfile:
+    - gemfiles/active_record5.gemfile
+    - gemfiles/active_record6.gemfile
   before_script:
     - psql -c "CREATE USER sample WITH PASSWORD 'password';" -U postgres
     - psql -c "CREATE DATABASE sample;" -U postgres
