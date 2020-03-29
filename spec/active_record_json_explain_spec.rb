@@ -16,32 +16,65 @@ RSpec.describe ActiveRecordJsonExplain do
 
   context 'mysql' do
     describe 'explain' do
-      it 'default explain result' do
-        result = File.read('spec/json_explain/mysql_default_explain.txt')
-        expect(Mysql::Sample.with_title.explain).to eq result
+      it 'default explain result', aggregate_failures: true do
+        result = Mysql::Sample.with_title.explain
+        expect(result).to match(/EXPLAIN for:/)
+        expect(result).to match(/SELECT `samples`.* FROM `samples`/)
+        expect(result).to match(/WHERE `samples`.`title` = 'hoge'/)
+        [
+          /id/, /select_type/, /table/, /partitions/, /type/,
+          /possible_keys/, /key/, /key_len/, /ref/, /rows/, /filtered/, /Extra/
+        ].each do |regexp|
+          expect(result).to match regexp
+        end
+        expect(result).to match(/1 row in set/)
       end
     end
 
     describe 'explain(json: true)' do
-      it 'json explain result' do
-        result = File.read('spec/json_explain/mysql_json_explain.txt')
-        expect(Mysql::Sample.with_title.explain(json: true)).to eq result
+      it 'json explain result', aggregate_failures: true do
+        result = Mysql::Sample.with_title.explain(json: true)
+        expect(result).to match(/EXPLAIN for:/)
+        expect(result).to match(/SELECT `samples`.* FROM `samples`/)
+        expect(result).to match(/WHERE `samples`.`title` = 'hoge'/)
+        [
+          /query_block/, /select_id/, /cost_info/, /table/, /table_name/,
+          /rows_examined_per_scan/, /rows_produced_per_join/, /filtered/,
+          /used_columns/, /attached_condition/
+        ].each do |regexp|
+          expect(result).to match regexp
+        end
+        expect(result).to match(/1 row in set/)
       end
     end
   end
 
   context 'postgresql' do
     describe 'explain' do
-      it 'default explain result' do
-        result = File.read('spec/json_explain/postgresql_default_explain.txt')
-        expect(Postgresql::Sample.with_title.explain).to eq result
+      it 'default explain result', aggregate_failures: true do
+        result = Postgresql::Sample.with_title.explain
+        expect(result).to match(/EXPLAIN for:/)
+        expect(result).to match(/SELECT "samples".* FROM "samples"/)
+        expect(result).to match(/WHERE "samples"."title" = \$1 \[\["title", "hoge"\]\]/)
+        expect(result).to match(/Seq Scan on samples/)
+        expect(result).to match(/Filter/)
+        expect(result).to match(/rows/)
       end
     end
 
     describe 'explain(json: true)' do
-      it 'json explain result' do
-        result = File.read('spec/json_explain/postgresql_json_explain.txt')
-        expect(Postgresql::Sample.with_title.explain(json: true)).to eq result
+      it 'json explain result', aggregate_failures: true do
+        result = Postgresql::Sample.with_title.explain(json: true)
+        expect(result).to match(/EXPLAIN for:/)
+        expect(result).to match(/SELECT "samples".* FROM "samples"/)
+        expect(result).to match(/WHERE "samples"."title" = \$1 \[\["title", "hoge"\]\]/)
+        [
+          /Plan/, /Node Type/, /Parallel Aware/, /Relation Name/, /Alias/,
+          /Startup Cost/, /Total Cost/, /Plan Rows/, /Plan Width/, /Filter/
+        ].each do |regexp|
+          expect(result).to match regexp
+        end
+        expect(result).to match(/row/)
       end
     end
   end
