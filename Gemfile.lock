@@ -31,7 +31,7 @@ GEM
       ast (~> 2.4.0)
     pg (1.2.3)
     rainbow (3.0.0)
-    rake (12.3.3)
+    rake (13.0.1)
     rexml (3.2.4)
     rspec (3.9.0)
       rspec-core (~> 3.9.0)
@@ -68,7 +68,7 @@ DEPENDENCIES
   active_record_json_explain!
   mysql2
   pg
-  rake (~> 12.0)
+  rake (~> 13.0)
   rspec (~> 3.0)
   rubocop
 
