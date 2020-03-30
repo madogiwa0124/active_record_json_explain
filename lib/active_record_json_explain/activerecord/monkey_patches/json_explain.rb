@@ -42,7 +42,7 @@ module ActiveRecord
   module ConnectionAdapters
     module PostgreSQL
       module DatabaseStatements
-        # https://github.com/rails/rails/blob/master/activerecord/lib/active_record/connection_adapters/mysql/database_statements.rb#L31-L38
+        # NOTE: https://github.com/rails/rails/blob/master/activerecord/lib/active_record/connection_adapters/mysql/database_statements.rb#L31-L38
         def explain(arel, binds = [], json: false) # NOTE: add arg json
           format_option = "(FORMAT JSON)" if json # NOTE: get format option
           sql = "EXPLAIN #{format_option} #{to_sql(arel, binds)}" # NOTE: set format option
