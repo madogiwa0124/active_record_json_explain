@@ -3,6 +3,8 @@
 
 This gem extends `ActiveRecord::Relation#explain` to make it possible to get EXPLAIN in JSON format.(Only supported MySQL and Postgresql)
 
+Supports ActiveRecord 5 latest and 6 latest.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -158,6 +160,17 @@ CREATE TABLE
 
 = Postgresql END =
 === END DB SETUP ====
+```
+
+Run require sample model and gem code.
+
+``` ruby
+irb(main):001:0> require_relative './spec/sample/mysql/model/sample'
+=> true
+irb(main):002:0> require 'active_record_json_explain'
+=> true
+irb(main):003:0> Mysql::Sample.with_title.explain(json: true)
+=> EXPLAIN for: SELECT `samples`.* FROM `samples` WHERE `samples`.`title` = 'hoge'
 ```
 
 ## Contributing
