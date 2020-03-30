@@ -1,4 +1,5 @@
 # ActiveRecordJsonExplain
+[![Gem Version](https://badge.fury.io/rb/active_record_json_explain.svg)](https://badge.fury.io/rb/active_record_json_explain)
 [![Build Status](https://travis-ci.com/Madogiwa0124/active_record_json_explain.svg?branch=master)](https://travis-ci.com/Madogiwa0124/active_record_json_explain)
 
 This gem extends `ActiveRecord::Relation#explain` to make it possible to get EXPLAIN in JSON format.(Only supported MySQL and Postgresql)
