@@ -5,8 +5,8 @@
     - mysql
     - postgresql
   rvm:
-    - 2.7.0
-    - 2.6.5
+    - 2.7.1
+    - 2.6.6
   os:
     - linux
   before_install:
