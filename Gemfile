@@ -8,5 +8,5 @@ gemspec
 gem 'mysql2'
 gem 'pg'
 gem 'rake', '~> 13.0'
-gem 'rspec', '~> 3.0'
+gem 'rspec', '~> 3.10'
 gem 'rubocop'
